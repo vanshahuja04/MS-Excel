@@ -64,7 +64,29 @@ body{
     align-items: center;
 }
 
+.font-family-selector{
+    width: 150px;
+    font-size: "Noto Sans";
+}
+
+.selector{
+    height: 30px;
+    font-size: 18px;
+}
+
+.selector option{
+    font-size: 18px;
+}
+
 .material-icons.menu-icon{
+    padding-left: 10px;
+    padding-right: 10px;
+    height: 100%;
+    display: flex;
+    align-items: center;
+}
+
+.menu-icon{
     padding-left: 10px;
     padding-right: 10px;
     height: 100%;
@@ -81,17 +103,19 @@ body{
     background-color: lightgray;
 }
 
-.font-family-selector{
-    width: 150px;
+.icon-color-fill, .icon-color-text{
+    position: relative;
 }
 
-.selector{
-    height: 30px;
-    font-size: 18px;
-}
-
-.selector option{
-    font-size: 18px;
+.color-picker{
+    position: absolute;
+    width: 28px;
+    height: 12px;
+    border: none;
+    padding: 0;
+    top: 29px;
+    right: 8px;
+    cursor: pointer;
 }
 
 /* Formula Bar CSS */
@@ -201,6 +225,8 @@ body{
     border-right: 1px solid lightgray;
     border-bottom: 1px solid lightgray;
     outline-color: #107c41;
+    font-size: 20px;
+    font-family: "Noto Sans";
 }
 
 .input-cell.selected{
@@ -254,14 +280,14 @@ body{
 .sheet-tab-container{
     border: 1px solid lightgray;
     width: calc(100vw - 110px);
+    display: flex;
 }
 
 .sheet-tab{
-    border-bottom: 4px solid #107c41;
-    padding-left: 10px;
-    padding-right: 10px;
+    padding-left: 0;
+    padding-right: 0;
     display: flex;
-    width: 93px;
+    width: 100px;
     align-items: center;
     justify-content: center;
     font-weight: 600;
@@ -269,6 +295,16 @@ body{
 }
 
 .sheet-tab:hover{
+    cursor: pointer;
+    background-color: lightgray;
+}
+
+.sheet-tab.selected{
+    border-bottom: 4px solid #107c41;
+}
+
+.sheet-tab.selected:hover{
     cursor: default;
+    background-color: #fff;
 }
 

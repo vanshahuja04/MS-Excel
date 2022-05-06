@@ -5,10 +5,10 @@ let defaultProperties = {
     "font-style": "",
     "text-decoration": "",
     "text-align": "left",
-    "background-color": "white",
-    "color": "black",
+    "background-color": "#ffffff",
+    "color": "#000000",
     "font-family": "Noto Sans",
-    "font-size": "14"
+    "font-size": "20px"
 }
 /* cellData is an object which contains all property of cell only if any property is changed from defaultProperties of particular cell */
 let cellData = {
@@ -17,6 +17,7 @@ let cellData = {
 
 let selectedSheet = "Sheet1";
 let totalSheets = 1;
+let lastlyAddedSheet=1;
 
 $(document).ready(function () { //code inside .ready method runs only when the DOM is loaded and ready to execute the JS code
 
@@ -134,6 +135,11 @@ $(document).ready(function () { //code inside .ready method runs only when the D
         let alignment = cellInfo["text-align"];
         $(".align-icon.selected").removeClass("selected");
         $(".icon-align-" + alignment).addClass("selected");
+        $(".background-color-picker").val(cellInfo["background-color"]);
+        $(".text-color-picker").val(cellInfo["color"]);
+        $(".font-family-selector").val(cellInfo["font-family"]);
+        $(".font-family-selector").css("font-family", cellInfo["font-family"]);
+        $(".font-size-selector").val(cellInfo["font-size"]);
     }
 
     /* Things to be done on the double click of cell */
@@ -145,9 +151,10 @@ $(document).ready(function () { //code inside .ready method runs only when the D
     })
 
     /* When we select any other cell then the cell which was selected will have blur property using which 
-    we can make its contenteditable false */
+    we can make its contenteditable false and store the text value given by user in the cellData */
     $(".input-cell").blur(function () {
         $(".input-cell.selected").attr("contenteditable", "false");
+        updateCell("text",$(this).text());
     })
 
     /* Whenever the input container is scolled we will scroll column-name-container as well as row-name-container */
@@ -243,3 +250,106 @@ $(".icon-align-right").click(function () {
         updateCell("text-align", "right", true);
     }
 })
+
+/* Below 2 functions are for opening color picker, when color picker icons are clicked */
+$(".color-fill-icon").click(function(){
+    $(".background-color-picker").click();
+})
+
+$(".color-fill-text").click(function(){
+    $(".text-color-picker").click();
+})
+
+/* Below 2 functions changes the background color and text color of selected cell with
+   the value picked in both the color pickers accordingly */
+$(".background-color-picker").change(function(){
+    updateCell("background-color", $(this).val());
+})
+
+$(".text-color-picker").change(function(){
+    updateCell("color", $(this).val());
+})
+
+/* Below 2 functions updates the properties of selected cell with the value selected in font
+   size and text size option bar */
+$(".font-family-selector").change(function(){
+    updateCell("font-family", $(this).val());
+    $(this).css("font-family",$(this).val());
+})
+
+$(".font-size-selector").change(function(){
+    updateCell("font-size", $(this).val());
+})
+
+/* When new sheet is added then we have to empty the whole sheet */
+function emptySheet() {
+    let sheetInfo = cellData[selectedSheet];
+    for(let i of Object.keys(sheetInfo)) {
+        for(let j of Object.keys(sheetInfo[i])) {
+            $(`#row-${i}-col-${j}`).text("");
+            $(`#row-${i}-col-${j}`).css("background-color", "#ffffff");
+            $(`#row-${i}-col-${j}`).css("color", "#000000");
+            $(`#row-${i}-col-${j}`).css("text-align", "left");
+            $(`#row-${i}-col-${j}`).css("font-weight", "");
+            $(`#row-${i}-col-${j}`).css("font-style", "");
+            $(`#row-${i}-col-${j}`).css("text-decoration", "");
+            $(`#row-${i}-col-${j}`).css("font-family", "Noto Sans");
+            $(`#row-${i}-col-${j}`).css("font-size", "14px");
+        }
+    }
+}
+
+/* When we open any sheet then this function will help to retain all the data of that sheet
+   and it will fill that data accordingly */
+   function loadSheet() {
+    let sheetInfo = cellData[selectedSheet];
+    for(let i of Object.keys(sheetInfo)) {
+        for(let j of Object.keys(sheetInfo[i])) {
+            let cellInfo = cellData[selectedSheet][i][j];
+            $(`#row-${i}-col-${j}`).text(cellInfo["text"]);
+            $(`#row-${i}-col-${j}`).css("background-color", cellInfo["background-color"]);
+            $(`#row-${i}-col-${j}`).css("color", cellInfo["color"]);
+            $(`#row-${i}-col-${j}`).css("text-align", cellInfo["text-align"]);
+            $(`#row-${i}-col-${j}`).css("font-weight", cellInfo["font-weight"]);
+            $(`#row-${i}-col-${j}`).css("font-style", cellInfo["font-style"]);
+            $(`#row-${i}-col-${j}`).css("text-decoration", cellInfo["text-decoration"]);
+            $(`#row-${i}-col-${j}`).css("font-family", cellInfo["font-family"]);
+            $(`#row-${i}-col-${j}`).css("font-size", cellInfo["font-size"]);
+        }
+    }
+}
+
+/* When add icon is clicked it will empty the current sheet data from sheet, remove the selected class from current sheet
+   and will add another sheet in sheet tab container */
+$(".icon-add").click(function(){
+    emptySheet();
+    $(".sheet-tab.selected").removeClass("selected");
+    let sheetName = "Sheet" + (lastlyAddedSheet + 1);
+    cellData[sheetName] = {};
+    totalSheets += 1;
+    lastlyAddedSheet += 1;
+    selectedSheet = sheetName;
+    $(".sheet-tab-container").append(`<div class="sheet-tab selected">${sheetName}</div>`);
+    $(".sheet-tab.selected").click(function(){ //it will put the same below listener to the newly added sheet 
+        if(!$(this).hasClass("selected")){
+            selectSheet(this);
+        }
+    })
+});
+
+/* When we click on previous sheet it will empty the current sheet data and load the previous sheet data which is clicked */
+$(".sheet-tab").click(function(){
+    if(!$(this).hasClass("selected")){
+        selectSheet(this);
+    }
+})
+
+/* This will remove the selection from previosly selected sheet and add selected class to currently clicked sheet. Also,
+   it will empty the previously selected sheet and add the data of sheet which is currently selected */
+function selectSheet(ele){
+    $(".sheet-tab.selected").removeClass("selected");
+    $(ele).addClass("selected");
+    emptySheet();
+    selectedSheet = $(ele).text();
+    loadSheet();
+}
