@@ -204,7 +204,7 @@ body{
     display: flex;
     justify-content: center;
     align-items: center;
-    min-height: 25px;
+    max-height: 25px;
     border-bottom: 1px solid lightgray;
 }
 
@@ -351,9 +351,7 @@ body{
     margin-bottom: 20px;
 }
 
-.modal-title{
 
-}
 
 .new-sheet-name{
     outline-color: #107c41;

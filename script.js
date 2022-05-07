@@ -335,12 +335,16 @@ $(".icon-add").click(function(){
 
 /* Contains functions which are implemented on sheets in the sheet bar */
 function addSheetEvents(){
-    $(".sheet-tab.selected").click(function(){ //When we click on another sheet it will empty the current sheet data and load the another sheet data which is clicked.
+
+    /* When we click on another sheet it will empty the current sheet data and load the another sheet data which is clicked */
+    $(".sheet-tab.selected").click(function(){ 
         if(!$(this).hasClass("selected")){
             selectSheet(this);
         }
     });
-    $(".sheet-tab.selected").contextmenu(function(e){//when we right click on sheet then our customized modal will appear which will contain rename and delete option
+
+    /* when we right click on sheet then our customized modal will appear which will contain rename and delete option */
+    $(".sheet-tab.selected").contextmenu(function(e){
         e.preventDefault();
         selectSheet(this);
         if($(".sheet-options-modal").length==0)
@@ -420,4 +424,52 @@ function selectSheet(ele){
     loadSheet();
 }
 
+/* Below code is for cut copy and paste */
+let selectedCells = [];
+let cut = false;
+
+function pushSelectedCells(){
+    $(".input-cell.selected").each(function(){
+        selectedCells.push(getRowCol(this));
+    })
+}
+
+$(".icon-copy").click(function(){
+    pushSelectedCells();
+});
+
+$(".icon-cut").click(function(){
+    pushSelectedCells();
+    cut = true;
+})
+
+/* For pasting we will count the row and column distance from each cell to be copy or cut to each cell to be pasted and the data is pasted 
+   to the destination cell */
+$(".icon-paste").click(function(){
+    emptySheet();
+    let [rowId, colId] = getRowCol($(".input-cell.selected")[0]);
+    let rowDistance = rowId - selectedCells[0][0];
+    let colDistance = colId - selectedCells[0][1];
+
+    for(let i of selectedCells) {
+        let newRowId = i[0] + rowDistance;
+        let newColId = i[1] + colDistance;
+        if(!cellData[selectedSheet][newRowId]) {//if the cell's row where data is to be pasted is not there in data then we will initialize it
+            cellData[selectedSheet][newRowId] = {};
+        }
+        cellData[selectedSheet][newRowId][newColId] = {...cellData[selectedSheet][i[0]][i[1]]};//copy from source cells to destination cells
+                                                                                          // and store data in cell data
+        if(cut){
+            delete cellData[selectedSheet][i[0]][i[1]];
+            if(Object.keys(cellData[selectedSheet][i[0]]).length==0){//after deleting cell data if no other cell exists in particular row then delete it
+                delete cellData[selectedSheet][i[0]];
+            }    
+        }
+    }
+    if(cut){
+        cut=false;
+        selectedCells = [];
+    }
+        loadSheet();
+});
 
