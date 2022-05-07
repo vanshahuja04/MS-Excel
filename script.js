@@ -330,19 +330,85 @@ $(".icon-add").click(function(){
     lastlyAddedSheet += 1;
     selectedSheet = sheetName;
     $(".sheet-tab-container").append(`<div class="sheet-tab selected">${sheetName}</div>`);
-    $(".sheet-tab.selected").click(function(){ //it will put the same below listener to the newly added sheet 
+    addSheetEvents();//called inside so that it can work on new sheets also which are added
+});
+
+/* Contains functions which are implemented on sheets in the sheet bar */
+function addSheetEvents(){
+    $(".sheet-tab.selected").click(function(){ //When we click on another sheet it will empty the current sheet data and load the another sheet data which is clicked.
         if(!$(this).hasClass("selected")){
             selectSheet(this);
         }
-    })
-});
-
-/* When we click on previous sheet it will empty the current sheet data and load the previous sheet data which is clicked */
-$(".sheet-tab").click(function(){
-    if(!$(this).hasClass("selected")){
+    });
+    $(".sheet-tab.selected").contextmenu(function(e){//when we right click on sheet then our customized modal will appear which will contain rename and delete option
+        e.preventDefault();
         selectSheet(this);
-    }
-})
+        if($(".sheet-options-modal").length==0)
+        {
+            $(".container").append(`<div class="sheet-options-modal">
+            <div class="sheet-rename">Rename</div>
+            <div class="sheet-delete">Delete</div>
+        </div>`);
+
+        /* Below are the functions for renaming the sheets */
+        $(".sheet-rename").click(function(){
+            $(".container").append(`<div class="sheet-rename-modal">
+            <h4 class="modal-title">Rename Sheet to:</h4>
+            <input type="text" class="new-sheet-name" placeholder="Sheet Name"/>
+            <div class="action-buttons">
+                <div class="submit-button">Rename</div>
+                <div class="cancel-button">Cancel</div>
+            </div>
+        </div>`);
+
+        $(".cancel-button").click(function(){
+            $(".sheet-rename-modal").remove();
+        });
+
+        $(".submit-button").click(function(){
+            let newSheetName = $(".new-sheet-name").val();
+            $(".sheet-tab.selected").text(newSheetName);
+            let newCellData = {};
+            for(let key in cellData){
+                if(key!= selectedSheet)
+                {
+                    newCellData[key]=cellData[key];
+                }else{
+                    newCellData[newSheetName] = cellData[key];
+                }
+            }
+            cellData = newCellData;
+            selectedSheet=newSheetName;
+            $(".sheet-rename-modal").remove();
+        });
+        $(".sheet-options-modal").remove();
+        });
+
+        /* Below is the function for deleting the sheet */
+        $(".sheet-delete").click(function(){
+            if(Object.keys(cellData).length > 1){
+                let currSheetName = selectedSheet;
+                let currSheet = $(".sheet-tab.selected");
+                let currSheetIndex = Object.keys(cellData).indexOf(selectedSheet);
+                if(currSheetIndex == 0)
+                {
+                    $(".sheet-tab.selected").next().click();
+                }else{
+                    $(".sheet-tab.selected").prev().click();
+                }
+                delete cellData[currSheetName];
+                currSheet.remove();
+            }else{
+                alert("Sorry, there is only one sheet! We Can't delete it.");
+            }
+            $(".sheet-options-modal").remove();
+        })
+        }
+    $(".sheet-options-modal").css("left",e.pageX + "px");
+    })
+}
+
+addSheetEvents();
 
 /* This will remove the selection from previosly selected sheet and add selected class to currently clicked sheet. Also,
    it will empty the previously selected sheet and add the data of sheet which is currently selected */
@@ -353,3 +419,5 @@ function selectSheet(ele){
     selectedSheet = $(ele).text();
     loadSheet();
 }
+
+

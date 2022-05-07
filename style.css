@@ -11,6 +11,7 @@ body{
 
 .container{
     height: 100vh;
+    position: relative;
 }
 /* Title Bar CSS */
 
@@ -308,3 +309,67 @@ body{
     background-color: #fff;
 }
 
+.sheet-options-modal{
+    position: absolute;
+    bottom: 4vh;
+    background-color: #fff;
+    height: 60px;
+    width: 80px;
+    box-shadow: 0 0 5px 3px lightgray;
+    bottom: 5vh;
+}
+
+.sheet-rename, .sheet-delete{
+    height: 30px;
+    font-weight: 500;
+    font-size: 16px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.sheet-delete:hover, .sheet-rename:hover{
+    background-color: lightgray;
+    cursor: pointer;
+}
+
+.sheet-rename-modal{
+    position: absolute;
+    height: 200px;
+    width: 300px;
+    top: calc(100vh / 2 - 100px);
+    left: calc(100vw / 2 - 150px);
+    background-color: white;
+    text-align: center;
+    box-shadow: 0 0 2px 1px lightgray;
+}
+
+.action-buttons{
+    display: flex;
+    justify-content: space-evenly;
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+
+.modal-title{
+
+}
+
+.new-sheet-name{
+    outline-color: #107c41;
+}
+
+.submit-button{
+    cursor: pointer;
+    color: white;
+    background-color: #107c41;
+    padding: 8px;
+    font-size: 20px;
+}
+
+.cancel-button{
+    cursor: pointer;
+    background-color: lightgray;
+    padding: 8px;
+    font-size: 20px;
+}
