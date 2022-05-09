@@ -319,6 +319,17 @@ function emptySheet() {
     }
 }
 
+$(".icon-right-scroll").click(function (e) {
+    if (Object.keys(cellData).indexOf(selectedSheet) != totalSheets - 1) {
+      $(".sheet-tab.selected").next().click();
+    }
+  });
+  $(".icon-left-scroll").click(function (e) {
+    if (Object.keys(cellData).indexOf(selectedSheet) != 0) {
+      $(".sheet-tab.selected").prev().click();
+    }
+  });
+
 /* When add icon is clicked it will empty the current sheet data from sheet, remove the selected class from current sheet
    and will add another sheet in sheet tab container */
 $(".icon-add").click(function(){
@@ -472,4 +483,5 @@ $(".icon-paste").click(function(){
     }
         loadSheet();
 });
+
 

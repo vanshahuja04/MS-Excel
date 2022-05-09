@@ -28,26 +28,27 @@ body{
 
 .menu-bar{
     height: 5vh;
-    background-color: #107c41;
+    background-color: #f2f3f1;
     display: flex; 
 }
 
 .menu-item{
     padding-left: 10px;
     padding-right: 10px;
-    color: white;
     font-size: 18;
     display: flex;
     align-items: center;
+    margin-left: 20px;
+    margin-right: 20px
 }
 
 .menu-item.selected {
-     background-color: #fff;
-     color: #107c41;
+    color: black;
+     border-bottom: 3px solid #107d40;
 }
 
 .menu-item:hover{
-     background-color: #0c5e31;
+     background-color: #e5e4e2;
      cursor: pointer;
 }
 
@@ -93,6 +94,8 @@ body{
     height: 100%;
     display: flex;
     align-items: center;
+    margin-left: 10px;
+    margin-right: 10px;
 }
 
 .menu-icon:hover{
@@ -102,6 +105,10 @@ body{
 
 .menu-icon.selected{
     background-color: lightgray;
+}
+
+.transfer:hover{
+    transform: scale(1.1);
 }
 
 .icon-color-fill, .icon-color-text{
@@ -204,7 +211,7 @@ body{
     display: flex;
     justify-content: center;
     align-items: center;
-    max-height: 25px;
+    min-height: 25px;
     border-bottom: 1px solid lightgray;
 }
 
@@ -228,6 +235,7 @@ body{
     outline-color: #107c41;
     font-size: 20px;
     font-family: "Noto Sans";
+    overflow: hidden;
 }
 
 .input-cell.selected{
@@ -279,9 +287,9 @@ body{
 }
 
 .sheet-tab-container{
-    border: 1px solid lightgray;
     width: calc(100vw - 110px);
     display: flex;
+    height: 5vh;
 }
 
 .sheet-tab{
@@ -292,7 +300,6 @@ body{
     align-items: center;
     justify-content: center;
     font-weight: 600;
-    border-right: 1px solid lightgray;
 }
 
 .sheet-tab:hover{
