@@ -23,7 +23,7 @@ Before starting :checkered_flag:, you need to have [Git](https://git-scm.com) an
 # Clone this project
 $ git clone https://github.com/vanshahuja04/MS-Excel.git
 
-$ cd ms-excel
+$ cd MS-Excel
 
 # Install server dependencies
 $ npm install -g live-server
